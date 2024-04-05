@@ -5,6 +5,7 @@
     - `conda env create -n <environment name> -f environment.yml`
     - `conda activate <environment name>`
 - Install [ehtplot](https://github.com/liamedeiros/ehtplot)
+- Install latest Julia 1.10.2 with [juliaup](https://github.com/JuliaLang/juliaup)
 - Make sure the FFMPEG in this conda env works for you. Otherwise install it.
 - You just need to modify `driver.py` and run it.
 
