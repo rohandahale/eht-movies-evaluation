@@ -482,8 +482,8 @@ for p in paths.keys():
     if len(im.ivec)>0 and len(im.vvec)>0:
         polvpaths[p]=paths[p]
 
-for p in polpaths.keys():
-    mv=eh.movie.load_hdf5(polpaths[p])
+for p in paths.keys():
+    mv=eh.movie.load_hdf5(paths[p])
 
     imlist = [mv.get_image(t) for t in times]
 
