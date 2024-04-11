@@ -39,6 +39,7 @@ scat = 'none'   # Options: sct, dsct, none
 if not os.path.exists(f'./{resultsdir}'):
     os.makedirs(f'./{resultsdir}')
 
+
 ##############################################################################################
 # Chi-squares, closure triangles, ampltitudes
 ##############################################################################################
@@ -145,4 +146,58 @@ if not os.path.exists(outpath):
         os.system(f'python ./src/vida.py --model {modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
     else:
         os.system(f'python ./src/vida.py --model {modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
+
+
 ##############################################################################################
+# Interpolated Movie, Averaged Movie, VIDA Ring, Cylinder
+##############################################################################################
+if not os.path.exists(f'./{resultsdir}/patternspeed'):
+    os.makedirs(f'./{resultsdir}/patternspeed')
+if not os.path.exists(f'./{resultsdir}/patternspeed_truth'):
+    os.makedirs(f'./{resultsdir}/patternspeed_truth')
+    
+# Interpolated Movies
+input=pathmov
+output=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+os.system(f'python ./src/hdf5_standardize.py -i {input} -o {output}')
+input=pathmovt
+output=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+os.system(f'python ./src/hdf5_standardize.py -i {input} -o {output}')
+        
+#Average Movies
+input=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+fits=os.path.basename(pathmov)[:-5]+'.fits'
+output=f'./{resultsdir}/patternspeed/{fits}'
+os.system(f'python ./src/avg_frame.py -i {input} -o {output}')
+input=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+fits=os.path.basename(pathmovt)[:-5]+'.fits'
+output=f'./{resultsdir}/patternspeed_truth/{fits}'
+os.system(f'python ./src/avg_frame.py -i {input} -o {output}')
+
+# VIDA Ring
+fits=os.path.basename(pathmov)[:-5]+'.fits'
+path=f'./{resultsdir}/patternspeed/{fits}'
+outpath = path[:-5]+'.csv'
+if not os.path.exists(outpath):    
+    os.system(f'julia ./src/ring_extractor.jl --in {path} --out {outpath}')
+    print(f'{os.path.basename(outpath)} created!')
+    
+fits=os.path.basename(pathmovt)[:-5]+'.fits'
+path=f'./{resultsdir}/patternspeed_truth/{fits}'
+outpath = path[:-5]+'.csv'
+if not os.path.exists(outpath):    
+    os.system(f'julia ./src/ring_extractor.jl --in {path} --out {outpath}')
+    print(f'{os.path.basename(outpath)} created!')
+
+# Cylinder
+ipathmov=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+ipathmovt=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+paths=[pathmovt, pathmov]
+  
+ringpath = ipathmov[:-5]+'.csv'
+outpath  = ipathmov[:-5]
+os.system(f'python ./src/cylinder.py {ipathmov} {ringpath} {outpath}')
+
+ringpath = ipathmovt[:-5]+'.csv'
+outpath  = ipathmovt[:-5]
+os.system(f'python ./src/cylinder.py {ipathmovt} {ringpath} {outpath}')
