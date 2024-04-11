@@ -377,7 +377,7 @@ elif model=='point':
 
     ax[0,0].legend(ncols=len(paths.keys()), loc='best',  bbox_to_anchor=(2.1, 1.4), markerscale=5.0)
 
-elif model=='sgra':
+else:
     fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(21,6), sharex=True)
     alpha = 0.5
     lc='grey'
@@ -444,8 +444,8 @@ elif model=='sgra':
 
     ax[0,0].legend(ncols=len(paths.keys()), loc='best',  bbox_to_anchor=(3.1, 1.4), markerscale=5.0)
     
-else:
-    print('Model not in the list of plot functions')
+#else:
+    #print('Model not in the list of plot functions')
     
 plt.savefig(outpath, bbox_inches='tight', dpi=300)
 print(f'{os.path.basename(outpath)} is created')
