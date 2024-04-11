@@ -18,7 +18,7 @@ modelsvida={
         }
 
 # Results Directory
-resultsdir='results_VL2.5'
+resultsdir='../VL2.5/results_VL2.5'
 
 # Recon Directory
 recondir='../VL2.5/recon/'
@@ -62,8 +62,8 @@ for d in datalist:
     ##############################################################################################
     # Directory of the results
     ##############################################################################################
-    if not os.path.exists(f'./{resultsdir}'):
-        os.makedirs(f'./{resultsdir}')
+    if not os.path.exists(f'{resultsdir}'):
+        os.makedirs(f'{resultsdir}')
 
     ##############################################################################################
     # Chi-squares, closure triangles, ampltitudes
@@ -73,21 +73,21 @@ for d in datalist:
         #########################
         #CHISQ
         #########################
-        outpath=f'./{resultsdir}/chisq_{pol}_{modelname}.png'
+        outpath=f'{resultsdir}/chisq_{pol}_{modelname}.png'
         if not os.path.exists(outpath):
             os.system(f'python ./src/chisq.py -d {data} --mv {pathmov} -o {outpath} --pol {pol} --scat {scat}')
 
         #########################
         # CPHASE
         #########################
-        outpath_tri=f'./{resultsdir}/triangle_{pol}_{modelname}.png'
+        outpath_tri=f'{resultsdir}/triangle_{pol}_{modelname}.png'
         if not os.path.exists(outpath_tri):
             os.system(f'python ./src/triangles.py -d {data} --mv {pathmov} -o {outpath_tri} --pol {pol} --scat {scat}')
 
         #########################
         # AMP
         #########################
-        outpath_amp=f'./{resultsdir}/amplitude_{pol}_{modelname}.png'
+        outpath_amp=f'{resultsdir}/amplitude_{pol}_{modelname}.png'
         if not os.path.exists(outpath_amp):
             os.system(f'python ./src/amplitudes.py -d {data} --mv {pathmov} -o {outpath_amp} --pol {pol} --scat {scat}')
 
@@ -96,14 +96,14 @@ for d in datalist:
     ##############################################################################################
 
     if modelname!='sgra':
-        outpath =f'./{resultsdir}/nxcorr_{modelname}.png'
+        outpath =f'{resultsdir}/nxcorr_{modelname}.png'
         if not os.path.exists(outpath):
             os.system(f'python ./src/nxcorr.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
 
     ##############################################################################################      
     # Stokes I GIF
     ##############################################################################################
-    outpath =f'./{resultsdir}/gif_{modelname}.gif'
+    outpath =f'{resultsdir}/gif_{modelname}.gif'
     if not os.path.exists(outpath):
         if modelname!='sgra':
             os.system(f'python ./src/gif.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
@@ -112,7 +112,7 @@ for d in datalist:
 
 
     # Stokes P GIF 
-    outpath =f'./{resultsdir}/gif_lp_{modelname}.gif'
+    outpath =f'{resultsdir}/gif_lp_{modelname}.gif'
     if not os.path.exists(outpath):
         if modelname!='sgra':
             os.system(f'python ./src/gif_lp.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
@@ -122,7 +122,7 @@ for d in datalist:
     ##############################################################################################
     # Stokes V GIF
     ##############################################################################################
-    outpath =f'./{resultsdir}/gif_cp_{modelname}.gif'
+    outpath =f'{resultsdir}/gif_cp_{modelname}.gif'
     if not os.path.exists(outpath):
         if modelname!='sgra':
             os.system(f'python ./src/gif_cp.py --data {data}  --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
@@ -132,7 +132,7 @@ for d in datalist:
     ##############################################################################################
     # Pol net, avg 
     ##############################################################################################
-    outpath =f'./{resultsdir}/pol_{modelname}.png'
+    outpath =f'{resultsdir}/pol_{modelname}.png'
     if not os.path.exists(outpath):
         if modelname!='sgra':
             os.system(f'python ./src/pol.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
@@ -143,7 +143,7 @@ for d in datalist:
     # REx ring characterization
     ##############################################################################################
     if modeltype =='ring':
-        outpath =f'./{resultsdir}/rex_{modelname}.png'
+        outpath =f'{resultsdir}/rex_{modelname}.png'
         if not os.path.exists(outpath) and not os.path.exists(outpath[:-4]+'.png'):
             if modelname!='sgra':
                 os.system(f'python ./src/rex.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath}')
@@ -154,18 +154,18 @@ for d in datalist:
     # VIDA
     ##############################################################################################
     input  = pathmov
-    output = f'./{resultsdir}/{modelname}_vida.csv'
+    output = f'{resultsdir}/{modelname}_vida.csv'
     if not os.path.exists(output):
         os.system(f'julia -p {cores} ./src/movie_extractor_parallel.jl --input {input} --output {output} --template {template} --stride {cores}')
     input_t  = pathmovt
-    output_t = f'./{resultsdir}/{modelname}_truth_vida.csv'
+    output_t = f'{resultsdir}/{modelname}_truth_vida.csv'
     if not os.path.exists(output_t):
         os.system(f'julia -p {cores} ./src/movie_extractor_parallel.jl --input {input_t} --output {output_t} --template {template} --stride {cores}')
 
     truthcsv  = output_t
     mvcsv     = output
 
-    outpath =f'./{resultsdir}/vida_{modelname}.png'
+    outpath =f'{resultsdir}/vida_{modelname}.png'
     if not os.path.exists(outpath):
         if modelname!='sgra':    
             os.system(f'python ./src/vida.py --model {modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
@@ -176,47 +176,47 @@ for d in datalist:
     ##############################################################################################
     # Interpolated Movie, Averaged Movie, VIDA Ring, Cylinder
     ##############################################################################################
-    if not os.path.exists(f'./{resultsdir}/patternspeed'):
-        os.makedirs(f'./{resultsdir}/patternspeed')
-    if not os.path.exists(f'./{resultsdir}/patternspeed_truth'):
-        os.makedirs(f'./{resultsdir}/patternspeed_truth')
+    if not os.path.exists(f'{resultsdir}/patternspeed'):
+        os.makedirs(f'{resultsdir}/patternspeed')
+    if not os.path.exists(f'{resultsdir}/patternspeed_truth'):
+        os.makedirs(f'{resultsdir}/patternspeed_truth')
         
     # Interpolated Movies
     input=pathmov
-    output=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+    output=f'{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
     os.system(f'python ./src/hdf5_standardize.py -i {input} -o {output}')
     input=pathmovt
-    output=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+    output=f'{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
     os.system(f'python ./src/hdf5_standardize.py -i {input} -o {output}')
             
     #Average Movies
-    input=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+    input=f'{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
     fits=os.path.basename(pathmov)[:-5]+'.fits'
-    output=f'./{resultsdir}/patternspeed/{fits}'
+    output=f'{resultsdir}/patternspeed/{fits}'
     os.system(f'python ./src/avg_frame.py -i {input} -o {output}')
-    input=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+    input=f'{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
     fits=os.path.basename(pathmovt)[:-5]+'.fits'
-    output=f'./{resultsdir}/patternspeed_truth/{fits}'
+    output=f'{resultsdir}/patternspeed_truth/{fits}'
     os.system(f'python ./src/avg_frame.py -i {input} -o {output}')
     
     # VIDA Ring
     fits=os.path.basename(pathmov)[:-5]+'.fits'
-    path=f'./{resultsdir}/patternspeed/{fits}'
+    path=f'{resultsdir}/patternspeed/{fits}'
     outpath = path[:-5]+'.csv'
     if not os.path.exists(outpath):    
         os.system(f'julia ./src/ring_extractor.jl --in {path} --out {outpath}')
         print(f'{os.path.basename(outpath)} created!')
         
     fits=os.path.basename(pathmovt)[:-5]+'.fits'
-    path=f'./{resultsdir}/patternspeed_truth/{fits}'
+    path=f'{resultsdir}/patternspeed_truth/{fits}'
     outpath = path[:-5]+'.csv'
     if not os.path.exists(outpath):    
         os.system(f'julia ./src/ring_extractor.jl --in {path} --out {outpath}')
         print(f'{os.path.basename(outpath)} created!')
     
     # Cylinder
-    ipathmov=f'./{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
-    ipathmovt=f'./{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
+    ipathmov=f'{resultsdir}/patternspeed/{os.path.basename(pathmov)}'
+    ipathmovt=f'{resultsdir}/patternspeed_truth/{os.path.basename(pathmovt)}'
     paths=[pathmovt, pathmov]
     
     ringpath = ipathmov[:-5]+'.csv'
