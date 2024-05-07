@@ -35,7 +35,7 @@ for d in datalist:
     dataf = os.path.basename(d)
     datap = datadir + dataf
     truth=truthdir+dataf[:-7]+'.hdf5'
-    recon=recondir+dataf[:-7]+'_40000_ireg.hdf5'
+    recon=recondir+dataf[:-7]+'.hdf5'
     
     print(f'Data: {datap}')
     print(f'Truth: {truth}')
@@ -45,6 +45,7 @@ for d in datalist:
 
     #modelname = 'mring' # 'crescent', 'ring', 'disk', 'edisk', 'double', 'point', 'sgra'
     modelname = dataf[:-7]
+    vida_modelname='crescent' #'crescent', 'ring', 'disk', 'edisk', 'double', 'point', 'sgra'
     modeltype = 'ring'     # 'ring', 'non-ring' (For REx)
     template = 'stretchmring_1_4' #modelsvida[modelname]
 
@@ -168,9 +169,9 @@ for d in datalist:
     outpath =f'{resultsdir}/vida_{modelname}.png'
     if not os.path.exists(outpath):
         if modelname!='sgra':    
-            os.system(f'python ./src/vida.py --model {modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
+            os.system(f'python ./src/vida.py --model {vida_modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
         else:
-            os.system(f'python ./src/vida.py --model {modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
+            os.system(f'python ./src/vida.py --model {vida_modelname} --truthcsv {truthcsv} --mvcsv {mvcsv} -o {outpath}')
     ##############################################################################################
     
     ##############################################################################################
