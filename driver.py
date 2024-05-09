@@ -47,19 +47,19 @@ for d in datalist:
     dataf = os.path.basename(d)
     datap = datadir + dataf
     
-    if dataf.find('ring') != -1:
+    if dataf.find('ring')==0 and dataf.find('mring')== -1:
         vida_modelname = 'ring'
         modeltype      = 'ring' 
-    elif dataf.find('disk') != -1:
+    elif dataf.find('disk') ==0 and dataf.find('edisk')== -1:
         vida_modelname = 'disk'
         modeltype      = 'non-ring' 
-    elif dataf.find('edisk') != -1:
+    elif dataf.find('edisk') ==0:
         vida_modelname = 'edisk'
         modeltype      = 'non-ring' 
-    elif dataf.find('double') != -1:
+    elif dataf.find('double')==0:
         vida_modelname = 'double'
         modeltype      = 'non-ring' 
-    elif dataf.find('point') != -1:
+    elif dataf.find('point')==0:
         vida_modelname = 'point'
         modeltype      = 'non-ring' 
     else:
