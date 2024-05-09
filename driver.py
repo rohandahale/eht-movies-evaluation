@@ -129,6 +129,16 @@ for d in datalist:
         outpath =f'{resultsdir}/nxcorr_{modelname}.png'
         if not os.path.exists(outpath):
             os.system(f'python ./src/nxcorr.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
+            
+    ##############################################################################################
+    # MBREVE
+    ##############################################################################################
+    outpath_mbreve=f'{resultsdir}/mbreve_{modelname}.png'
+    if not os.path.exists(outpath_mbreve):
+        if modelname!='sgra':
+            os.system(f'python ./src/mbreve.py -d {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath_mbreve} --scat {scat}')
+        else:
+            os.system(f'python ./src/mbreve.py -d {data} --mv {pathmov} -o {outpath_mbreve} --scat {scat}')
 
     ##############################################################################################      
     # Stokes I GIF
