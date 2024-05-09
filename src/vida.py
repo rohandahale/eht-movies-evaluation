@@ -124,6 +124,19 @@ if model=='crescent':
         a = df['model_1_s_1']/2
         n =np.rad2deg(df['model_1_ξs_1'])
         t = df['time']
+        
+        for c in [d,w0,a,n]:
+            for i in range(1,len(c)-1):
+                if (c==n).all():
+                    j= c[i-1]+ 2*np.pi
+                    k= c[i]+ 2*np.pi
+                    l= c[i+1]+ 2*np.pi
+                    if k> 1.1*j and k> 1.1*l:
+                        c[i] = c[i-1]
+                else:   
+                    if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                        c[i] = c[i-1]+0.01*c[i-1]
+                
 
         mc=colors[p]
         ax[0,0].plot(t, d,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
@@ -159,6 +172,11 @@ elif model=='ring':
         w0 = df['model_1_σ0']/eh.RADPERUAS*(2*np.sqrt(2*np.log(2)))
 
         t = df['time']
+        
+        for c in [d,w0]:
+            for i in range(1,len(c)-1):
+                if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                    c[i] = c[i-1]+0.01*c[i-1]
 
         mc=colors[p]
         ax[0].plot(t, d,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
@@ -193,6 +211,11 @@ elif model=='disk':
 
         t = df['time']
 
+        for c in [d,w0]:
+            for i in range(1,len(c)-1):
+                if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                    c[i] = c[i-1]+0.01*c[i-1]
+                        
         mc=colors[p]
         ax[0].plot(t, d,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
         ax[1].plot(t, w0, marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha)
@@ -243,6 +266,18 @@ elif model=='edisk':
         n =np.rad2deg(df['model_1_ξ_1'])
         t = df['time']
 
+        for c in [d,w0,e,n]:
+            for i in range(1,len(c)-1):
+                if (c==n).all():
+                    j= c[i-1]+ np.pi
+                    k= c[i]+ np.pi
+                    l= c[i+1]+ np.pi
+                    if k> 1.1*j and k> 1.1*l:
+                        c[i] = c[i-1]
+                else:   
+                    if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                        c[i] = c[i-1]+0.01*c[i-1]
+                        
         mc=colors[p]
         ax[0,0].plot(t, d,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
         ax[0,1].plot(t, w0, marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha)
@@ -304,6 +339,18 @@ elif model=='double':
         r0 = np.abs(pos)
         pa = np.rad2deg(np.angle(pos))
         t = df['time']
+        
+        for c in [d1,d2,r0,pa]:
+            for i in range(1,len(c)-1):
+                if (c==pa).all():
+                    j= c[i-1]+ 2*np.pi
+                    k= c[i]+ 2*np.pi
+                    l= c[i+1]+ 2*np.pi
+                    if k> 1.1*j and k> 1.1*l:
+                        c[i] = c[i-1]
+                else:   
+                    if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                        c[i] = c[i-1]+0.01*c[i-1]
 
         mc=colors[p]
         ax[0,0].plot(t, d1,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
@@ -366,6 +413,18 @@ elif model=='point':
         pa = np.rad2deg(np.angle(pos))
         t = df['time']
 
+        for c in [d1,d2,r0,pa]:
+            for i in range(1,len(c)-1):
+                if (c==pa).all():
+                    j= c[i-1]+ 2*np.pi
+                    k= c[i]+ 2*np.pi
+                    l= c[i+1]+ 2*np.pi
+                    if k> 1.1*j and k> 1.1*l:
+                        c[i] = c[i-1]
+                else:   
+                    if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                        c[i] = c[i-1]+0.01*c[i-1]
+                        
         mc=colors[p]
         ax[0,0].plot(t, d1,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
         ax[0,1].plot(t, d2,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha)
@@ -432,6 +491,19 @@ else:
         n2 =np.rad2deg(df['model_1_ξs_2'])
         t = df['time']
         mc=colors[p]
+        
+        for c in [d,w0,a,e,n,n2]:
+            for i in range(1,len(c)-1):
+                if (c==n).all() or (c==n2).all():
+                    j= c[i-1]+ 2*np.pi
+                    k= c[i]+ 2*np.pi
+                    l= c[i+1]+ 2*np.pi
+                    if k> 1.1*j and k> 1.1*l:
+                        c[i] = c[i-1]
+                else:   
+                    if abs(c[i])> 1.1*abs(c[i-1]) and abs(c[i])> 1.1*abs(c[i+1]):
+                        c[i] = c[i-1]+0.01*c[i-1]
+                        
         ax[0,0].plot(t, d,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha, label=labels[p])
         ax[0,1].plot(t, w0, marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha)
         ax[0,2].plot(t, n,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1, color=lc, alpha=alpha)
