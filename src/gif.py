@@ -198,7 +198,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
 
         # Set colorbar limits
         TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
-        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
+        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, 0
 
         def plot_frame(f):
             for i, p in enumerate(movieIs.keys()):
@@ -210,7 +210,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                 ax.set_xticks([]), ax.set_yticks([])
 
             if f==0:
-                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E') 
+                ax1 = fig.add_axes([0.85, 0.11, 0.035, 0.77] , anchor = 'E') 
                 fig.colorbar(im, cax=ax1, ax=None, label = '$T_B$ ($10^9$ K)')
 
             return fig
@@ -222,6 +222,6 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
     wri = animation.writers['ffmpeg'](fps=fps, bitrate=1e6)
 
     # Save gif
-    ani.save(outpath, writer=wri, dpi=100)
+    ani.save(outpath, writer=wri, dpi=100, savefig_kwargs={"transparent": True, "facecolor": "none"})
 
 writegif(imlistIs, titles, paths, outpath=outpath, fov=fov, times=u_times, cmaps=cmapsl)

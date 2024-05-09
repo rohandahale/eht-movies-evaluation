@@ -219,7 +219,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
 
             return fig
     else:
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,5))
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6.5,5))
         #fig.tight_layout()
 
         # Set axis limits
@@ -274,7 +274,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
 
 
             if f==0:
-                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E')     
+                ax1 = fig.add_axes([0.825, 0.11, 0.035, 0.77] , anchor = 'E')     
                 fig.colorbar(ScalarMappable(norm=vcontour.norm, cmap=vcontour.cmap), cax=ax1, pad=0.12, fraction=0.046).set_label(label='$T_B$ ($10^9$ K)')
 
             return fig

@@ -224,7 +224,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                     vy = np.ma.masked_where(imarr < pcut * Imax, vy) 
 
     
-                    cnorm=Normalize(vmin=0.0, vmax=0.2)
+                    cnorm=Normalize(vmin=0.0, vmax=1.0)
                     tickplot = ax[i].quiver(-x[::skip, ::skip],-y[::skip, ::skip],vx[::skip, ::skip],vy[::skip, ::skip],
                                    mfrac_m[::skip,::skip],
                                    headlength=0,
@@ -243,7 +243,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
 
             return fig
     else:
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,5))
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6.5,5))
         #fig.tight_layout()
         # Set axis limits
         lims = None
@@ -309,7 +309,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                     vy = np.ma.masked_where(imarr < pcut * Imax, vy) 
 
     
-                    cnorm=Normalize(vmin=0.0, vmax=0.2)
+                    cnorm=Normalize(vmin=0.0, vmax=1.0)
                     tickplot = ax.quiver(-x[::skip, ::skip],-y[::skip, ::skip],vx[::skip, ::skip],vy[::skip, ::skip],
                                    mfrac_m[::skip,::skip],
                                    headlength=0,
@@ -320,7 +320,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                                    norm=cnorm,
                                    scale=16)
             if f==0:
-                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E') 
+                ax1 = fig.add_axes([0.825, 0.11, 0.035, 0.77] , anchor = 'E') 
                 cbar = fig.colorbar(tickplot, cmap='rainbow', cax=ax1, pad=0.14,fraction=0.038, orientation="vertical") 
                 cbar.set_label('$|m|$') 
 
