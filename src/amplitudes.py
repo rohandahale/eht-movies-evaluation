@@ -44,7 +44,7 @@ mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
 plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
@@ -140,7 +140,7 @@ elif pol=='V':
 else:
     print('Parse a vaild pol value')
     
-color = 'darkorange'
+color = 'red'
 label = 'Reconstruction'
 
 
@@ -223,7 +223,7 @@ for i in range(1,numplt+1):
 for i in tqdm(range(numplt)):
     subtab  = select_baseline(vtab, bs_list[i][0], bs_list[i][1])
     axs[i].errorbar(subtab['time'], abs(subtab[vis]), yerr=subtab[sigma],
-                    c='white', mec='white', marker='o', ls="None", ms=5, alpha=0.5, label='Data')
+                    c='black', mec='black', marker='o', ls="None", ms=5, alpha=0.5, label='Data')
 
     mv = eh.movie.load_hdf5(polpath)
     amp_mod_time, amp_mod_win = mov_amp
@@ -231,7 +231,7 @@ for i in tqdm(range(numplt)):
                     c=color, marker='o', ms=2.5, ls="none", label=label, alpha=0.5)
     
 
-    axs[i].axhline(y=0, c='k', ls=':')
+    #axs[i].axhline(y=0, c='k', ls=':')
     axs[i].set_title("%s-%s" %(bs_list[i][0], bs_list[i][1]), fontsize=18)
 
     if i == 0:

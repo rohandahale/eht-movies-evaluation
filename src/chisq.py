@@ -42,7 +42,7 @@ plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
 plt.rcParams["ytick.major.size"]=5
 plt.rcParams["ytick.minor.size"]=2.5
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
@@ -138,7 +138,7 @@ elif pol=='V':
 else:
     print('Parse a vaild pol value')
     
-color = 'darkorange'
+color = 'red'
 label = 'Reconstruction'
 
 fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(21,6), sharex=True)
@@ -199,15 +199,15 @@ ax[2].plot(times, chia_t, marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', 
 ax[2].set_yscale('log')
 
       
-ax[0].hlines(1, xmin=10.5, xmax=14.5, color='white', ls='--', lw=1.5, zorder=0)
-ax[1].hlines(1, xmin=10.5, xmax=14.5, color='white', ls='--', lw=1.5, zorder=0)
-ax[2].hlines(1, xmin=10.5, xmax=14.5, color='white', ls='--', lw=1.5, zorder=0)
+ax[0].hlines(1, xmin=10.5, xmax=14.5, color='black', ls='--', lw=1.5, zorder=0)
+ax[1].hlines(1, xmin=10.5, xmax=14.5, color='black', ls='--', lw=1.5, zorder=0)
+ax[2].hlines(1, xmin=10.5, xmax=14.5, color='black', ls='--', lw=1.5, zorder=0)
 
 ax[0].yaxis.set_ticklabels([])
 ax[1].yaxis.set_ticklabels([])
 ax[2].yaxis.set_ticklabels([])
 
-ax[0].text(10.5, 12, f'Stokes: {pol}', color='white', fontsize=18)
+ax[0].text(10.5, 12, f'Stokes: {pol}', color='black', fontsize=18)
 
 col_labels =  ['Recon.']
 row_labels = ['$\chi^{2}$ cphase','$\chi^{2}$ logcamp','$\chi^{2}$ amp']
@@ -223,8 +223,8 @@ table.auto_set_font_size(False)
 table.set_fontsize(18)
 for c in table.get_children():
     c.set_edgecolor('none')
-    c.set_text_props(color='white')
+    c.set_text_props(color='black')
     c.set_facecolor('none')
-    c.set_edgecolor('white')
+    c.set_edgecolor('black')
         
 plt.savefig(args.outpath, bbox_inches='tight', dpi=300)

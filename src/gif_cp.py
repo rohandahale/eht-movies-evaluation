@@ -34,7 +34,7 @@ import matplotlib as mpl
 #mpl.rc('font', **{'family':'serif', 'serif':['Computer Modern Roman'], 'monospace': ['Computer Modern Typewriter']})
 mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -69,9 +69,6 @@ for t in obs.scans:
     times.append(t[0])
 obslist = obs.split_obs()
 ######################################################################
-
-pathmov  = args.mv
-pathmovt  = args.truthmv
 outpath = args.outpath
 
 paths={}
@@ -109,7 +106,7 @@ blur   = 0 * eh.RADPERUAS
 ######################################################################
 
 titles = {  
-            'truth'      : 'Truth',
+            'truth'       : 'Truth',
             'recon'       : 'Reconstruction',
         }
 
@@ -157,69 +154,130 @@ for p in paths.keys():
 
 def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cmapsl, interp='gaussian', fps=20):
 
-    fig, ax = plt.subplots(nrows=1, ncols=len(paths.keys()), figsize=(8,5))
-    #fig.tight_layout()
-    fig.subplots_adjust(hspace=0.01, wspace=0.05, top=0.8, bottom=0.01, left=0.01, right=0.8)
+    if len(paths.keys())!=1:
+        fig, ax = plt.subplots(nrows=1, ncols=len(paths.keys()), figsize=(8,5))
+        #fig.tight_layout()
+        fig.subplots_adjust(hspace=0.01, wspace=0.05, top=0.8, bottom=0.01, left=0.01, right=0.8)
 
-    # Set axis limits
-    lims = None
-    if fov:
-        fov  = fov / eh.RADPERUAS
-        lims = [fov//2, -fov//2, -fov//2, fov//2]
+        # Set axis limits
+        lims = None
+        if fov:
+            fov  = fov / eh.RADPERUAS
+            lims = [fov//2, -fov//2, -fov//2, fov//2]
 
-    # Set colorbar limits
-    TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
-    vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
-    
-    polmovies={}
-    for i, p in enumerate(movieIs.keys()):
-        if p!='starwarps':
-            if len(movieIs[p][0].vvec)> 0:
-                polmovies[p]=movieIs[p]
-    
-    def plot_frame(f):
+        # Set colorbar limits
+        TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
+        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
+
+        polmovies={}
         for i, p in enumerate(movieIs.keys()):
-            ax[i].clear() 
-            TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
-            im =ax[i].imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
-            
-            ax[i].set_title(titles[p], fontsize=18)
-            ax[i].set_xticks([]), ax[i].set_yticks([])
-            
-            if p in polmovies.keys():
-                im = polmovies[p][f]
+            if p!='starwarps':
+                if len(movieIs[p][0].vvec)> 0:
+                    polmovies[p]=movieIs[p]
 
-                # Contour level settings
-                TBfactor = 3.254e13/(im.rf**2 * im.psize**2)/1e9
-                nlevels = 6
-                Vmax_cbar=2.0/TBfactor 
-                Vmax = Vmax_cbar   
-                levels = np.arange(-Vmax*TBfactor, (1+1./nlevels)*Vmax*TBfactor, Vmax*TBfactor/nlevels)
-                midindex = int(len(levels)/2-0.5)
+        def plot_frame(f):
+            for i, p in enumerate(movieIs.keys()):
+                ax[i].clear() 
+                TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
+                im =ax[i].imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
 
-                levels = np.delete(levels, [midindex])
-                            
-                # generate 2 2d grids for the x & y bounds
-                pixel=im.psize/eh.RADPERUAS #uas
-                FOV=pixel*im.xdim
+                ax[i].set_title(titles[p], fontsize=18)
+                ax[i].set_xticks([]), ax[i].set_yticks([])
 
-                # generate 2 2d grids for the x & y bounds
-                y, x = np.mgrid[slice(-FOV/2, FOV/2, pixel),
-                    slice(-FOV/2, FOV/2, pixel)]
-                
-                varr = im.vvec.reshape(im.ydim, im.xdim)
+                if p in polmovies.keys():
+                    im = polmovies[p][f]
 
-                vcontour = ax[i].contour(x, y, np.flip(varr*TBfactor), levels=levels, cmap='bwr', vmin=-Vmax_cbar*TBfactor, vmax=Vmax_cbar*TBfactor, linewidths=2) 
-                
-            
-        if f==0:
-            ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E')     
-            fig.colorbar(ScalarMappable(norm=vcontour.norm, cmap=vcontour.cmap), cax=ax1, pad=0.12, fraction=0.046).set_label(label='$T_B$ ($10^9$ K)')
+                    # Contour level settings
+                    TBfactor = 3.254e13/(im.rf**2 * im.psize**2)/1e9
+                    nlevels = 6
+                    Vmax_cbar=2.0/TBfactor 
+                    Vmax = Vmax_cbar   
+                    levels = np.arange(-Vmax*TBfactor, (1+1./nlevels)*Vmax*TBfactor, Vmax*TBfactor/nlevels)
+                    midindex = int(len(levels)/2-0.5)
 
-        
-        plt.suptitle(f"{u_times[f]:.2f} UT", y=0.95, fontsize=22)
+                    levels = np.delete(levels, [midindex])
 
-        return fig
+                    # generate 2 2d grids for the x & y bounds
+                    pixel=im.psize/eh.RADPERUAS #uas
+                    FOV=pixel*im.xdim
+
+                    # generate 2 2d grids for the x & y bounds
+                    y, x = np.mgrid[slice(-FOV/2, FOV/2, pixel),
+                        slice(-FOV/2, FOV/2, pixel)]
+
+                    varr = im.vvec.reshape(im.ydim, im.xdim)
+
+                    vcontour = ax[i].contour(x, y, np.flip(varr*TBfactor), levels=levels, cmap='bwr', vmin=-Vmax_cbar*TBfactor, vmax=Vmax_cbar*TBfactor, linewidths=2) 
+
+
+            if f==0:
+                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E')     
+                fig.colorbar(ScalarMappable(norm=vcontour.norm, cmap=vcontour.cmap), cax=ax1, pad=0.12, fraction=0.046).set_label(label='$T_B$ ($10^9$ K)')
+
+
+            plt.suptitle(f"{u_times[f]:.2f} UT", y=0.95, fontsize=22)
+
+            return fig
+    else:
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,5))
+        #fig.tight_layout()
+
+        # Set axis limits
+        lims = None
+        if fov:
+            fov  = fov / eh.RADPERUAS
+            lims = [fov//2, -fov//2, -fov//2, fov//2]
+
+        # Set colorbar limits
+        TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
+        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
+
+        polmovies={}
+        for i, p in enumerate(movieIs.keys()):
+            if p!='starwarps':
+                if len(movieIs[p][0].vvec)> 0:
+                    polmovies[p]=movieIs[p]
+
+        def plot_frame(f):
+            for i, p in enumerate(movieIs.keys()):
+                ax.clear() 
+                TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
+                im =ax.imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
+
+                ax.set_title(f"{u_times[f]:.2f} UT", fontsize=18)
+                ax.set_xticks([]), ax.set_yticks([])
+
+                if p in polmovies.keys():
+                    im = polmovies[p][f]
+
+                    # Contour level settings
+                    TBfactor = 3.254e13/(im.rf**2 * im.psize**2)/1e9
+                    nlevels = 6
+                    Vmax_cbar=2.0/TBfactor 
+                    Vmax = Vmax_cbar   
+                    levels = np.arange(-Vmax*TBfactor, (1+1./nlevels)*Vmax*TBfactor, Vmax*TBfactor/nlevels)
+                    midindex = int(len(levels)/2-0.5)
+
+                    levels = np.delete(levels, [midindex])
+
+                    # generate 2 2d grids for the x & y bounds
+                    pixel=im.psize/eh.RADPERUAS #uas
+                    FOV=pixel*im.xdim
+
+                    # generate 2 2d grids for the x & y bounds
+                    y, x = np.mgrid[slice(-FOV/2, FOV/2, pixel),
+                        slice(-FOV/2, FOV/2, pixel)]
+
+                    varr = im.vvec.reshape(im.ydim, im.xdim)
+
+                    vcontour = ax.contour(x, y, np.flip(varr*TBfactor), levels=levels, cmap='bwr', vmin=-Vmax_cbar*TBfactor, vmax=Vmax_cbar*TBfactor, linewidths=2) 
+
+
+            if f==0:
+                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E')     
+                fig.colorbar(ScalarMappable(norm=vcontour.norm, cmap=vcontour.cmap), cax=ax1, pad=0.12, fraction=0.046).set_label(label='$T_B$ ($10^9$ K)')
+
+            return fig
     
     def update(f):
         return plot_frame(f)

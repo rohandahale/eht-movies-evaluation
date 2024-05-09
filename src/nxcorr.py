@@ -43,7 +43,7 @@ plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
 plt.rcParams["ytick.major.size"]=5
 plt.rcParams["ytick.minor.size"]=2.5
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -110,7 +110,7 @@ for t in y:
     obslist_t.append(obslist_tn[t[0]])
 ######################################################################
 
-color = 'darkorange'
+color = 'red'
 
 label = 'Reconstruction'
 
@@ -203,7 +203,7 @@ for pol in pollist:
         else:
             ax[k].plot(times, nxcorr_t,  marker ='o', mfc=mc, mec=mc, mew=2.5, ms=2.5, ls='-', lw=1,  color=lc, alpha=alpha)  
     
-    ax[k].hlines(1, xmin=10.5, xmax=14.5, color='white', ls='--', lw=1.5, zorder=0)
+    ax[k].hlines(1, xmin=10.5, xmax=14.5, color='black', ls='--', lw=1.5, zorder=0)
     #ax[k].yaxis.set_ticklabels([])
     k=k+1
 
@@ -220,9 +220,9 @@ table.auto_set_font_size(False)
 table.set_fontsize(22)
 for c in table.get_children():
     c.set_edgecolor('none')
-    c.set_text_props(color='white')
+    c.set_text_props(color='black')
     c.set_facecolor('none')
-    c.set_edgecolor('white')
+    c.set_edgecolor('black')
 #ax[0].legend(ncols=2, loc='best',  bbox_to_anchor=(2.1, 1.2), markerscale=5.0)
 
 plt.savefig(outpath, bbox_inches='tight', dpi=300)

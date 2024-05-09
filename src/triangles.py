@@ -46,7 +46,7 @@ mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
 plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -153,7 +153,7 @@ elif pol=='V':
 else:
     print('Parse a vaild pol value')
     
-color = 'darkorange'
+color = 'red'
 label = 'Reconstruction'
 
 
@@ -239,7 +239,7 @@ for i in tqdm(range(numplt)):
     # closure phase
     subtab  = select_triangle(ctab, tri_list[i][0], tri_list[i][1], tri_list[i][2])
     axs[i].errorbar(subtab['time'], subtab['cphase'], yerr=subtab['sigmacp'],
-                    c='white', mec='white', marker='o', ls="None", ms=5, alpha=0.5, label='Data')
+                    c='black', mec='black', marker='o', ls="None", ms=5, alpha=0.5, label='Data')
     
     # Model
     mv = eh.movie.load_hdf5(polpath)
@@ -261,7 +261,7 @@ for i in tqdm(range(numplt)):
     if fix_xax:
         axs[i].set_xlim(xmin-0.5, xmax+0.5)
 
-axs[0].text(10.5, 260, f'Stokes: {pol}', color='white', fontsize=18)
+axs[0].text(10.5, 260, f'Stokes: {pol}', color='black', fontsize=18)
 
 fig.subplots_adjust(top=0.93)
 plt.savefig(outpath, bbox_inches='tight', dpi=300)

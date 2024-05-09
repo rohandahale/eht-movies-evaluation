@@ -34,7 +34,7 @@ import matplotlib as mpl
 #mpl.rc('font', **{'family':'serif', 'serif':['Computer Modern Roman'], 'monospace': ['Computer Modern Typewriter']})
 mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -68,9 +68,6 @@ for t in obs.scans:
     times.append(t[0])
 obslist = obs.split_obs()
 ######################################################################
-
-pathmov  = args.mv
-pathmovt  = args.truthmv
 outpath = args.outpath
 
 paths={}
@@ -109,7 +106,7 @@ blur   = 0 * eh.RADPERUAS
 ######################################################################
 
 titles = {  
-            'truth'      : 'Truth',
+            'truth'       : 'Truth',
             'recon'       : 'Reconstruction',
         }
 
@@ -129,8 +126,8 @@ for i in range(len(times)-1):
         j=0
         while u_times[len(u_times)-1] < times[i+1]-mean_dt:
             u_times.append(times[i]+j*mean_dt)
-            #cmapsl.append('binary_usr')
-            cmapsl.append('afmhot_us')
+            cmapsl.append('binary_usr')
+            #cmapsl.append('afmhot_us')
             j=j+1
     else:
         u_times.append(times[i])
@@ -158,36 +155,65 @@ for p in paths.keys():
 
 def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cmapsl, interp='gaussian', fps=20):
 
-    fig, ax = plt.subplots(nrows=1, ncols=len(paths.keys()), figsize=(8,5))
-    #fig.tight_layout()
-    fig.subplots_adjust(hspace=0.01, wspace=0.05, top=0.8, bottom=0.01, left=0.01, right=0.8)
+    if len(paths.keys())!=1:
+        fig, ax = plt.subplots(nrows=1, ncols=len(paths.keys()), figsize=(8,5))
+        #fig.tight_layout()
+        fig.subplots_adjust(hspace=0.01, wspace=0.05, top=0.8, bottom=0.01, left=0.01, right=0.8)
 
-    # Set axis limits
-    lims = None
-    if fov:
-        fov  = fov / eh.RADPERUAS
-        lims = [fov//2, -fov//2, -fov//2, fov//2]
+        # Set axis limits
+        lims = None
+        if fov:
+            fov  = fov / eh.RADPERUAS
+            lims = [fov//2, -fov//2, -fov//2, fov//2]
 
-    # Set colorbar limits
-    TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
-    vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
+        # Set colorbar limits
+        TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
+        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
 
-    def plot_frame(f):
-        for i, p in enumerate(movieIs.keys()):
-            ax[i].clear() 
-            TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
-            im =ax[i].imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
+        def plot_frame(f):
+            for i, p in enumerate(movieIs.keys()):
+                ax[i].clear() 
+                TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
+                im =ax[i].imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
+
+                ax[i].set_title(f"{u_times[f]:.2f} UT", fontsize=18)
+                ax[i].set_xticks([]), ax[i].set_yticks([])
+
+            if f==0:
+                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E') 
+                fig.colorbar(im, cax=ax1, ax=None, label = '$T_B$ ($10^9$ K)')
+
+            plt.suptitle(f"{u_times[f]:.2f} UT", y=0.95, fontsize=22)
+
+            return fig
+    else:
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6,5))
+        #fig.tight_layout()
         
-            ax[i].set_title(titles[p], fontsize=18)
-            ax[i].set_xticks([]), ax[i].set_yticks([])
-            
-        if f==0:
-            ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E') 
-            fig.colorbar(im, cax=ax1, ax=None, label = '$T_B$ ($10^9$ K)')
-        
-        plt.suptitle(f"{u_times[f]:.2f} UT", y=0.95, fontsize=22)
+        # Set axis limits
+        lims = None
+        if fov:
+            fov  = fov / eh.RADPERUAS
+            lims = [fov//2, -fov//2, -fov//2, fov//2]
 
-        return fig
+        # Set colorbar limits
+        TBfactor = 3.254e13/(movieIs['recon'][0].rf**2 * movieIs['recon'][0].psize**2)/1e9    
+        vmax, vmin = max(movieIs['recon'][0].ivec)*TBfactor, min(movieIs['recon'][0].ivec)*TBfactor
+
+        def plot_frame(f):
+            for i, p in enumerate(movieIs.keys()):
+                ax.clear() 
+                TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
+                im =ax.imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
+
+                ax.set_title(titles[p], fontsize=18)
+                ax.set_xticks([]), ax.set_yticks([])
+
+            if f==0:
+                ax1 = fig.add_axes([0.82, 0.1, 0.02, 0.6] , anchor = 'E') 
+                fig.colorbar(im, cax=ax1, ax=None, label = '$T_B$ ($10^9$ K)')
+
+            return fig
     
     def update(f):
         return plot_frame(f)

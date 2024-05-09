@@ -40,7 +40,7 @@ mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
 plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -112,8 +112,8 @@ for t in y:
 ######################################################################
 
 colors = {  
-            'truth'    : 'white',
-            'recon'     : 'darkorange',
+            'truth'     : 'black',
+            'recon'     : 'red',
         }
 
 labels = {  

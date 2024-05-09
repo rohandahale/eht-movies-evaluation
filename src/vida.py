@@ -38,7 +38,7 @@ mpl.rcParams['figure.dpi']=300
 #mpl.rcParams["mathtext.default"] = 'regular'
 plt.rcParams["xtick.direction"]="in"
 plt.rcParams["ytick.direction"]="in"
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 mpl.rcParams["axes.labelsize"] = 20
 mpl.rcParams["xtick.labelsize"] = 18
 mpl.rcParams["ytick.labelsize"] = 18
@@ -55,9 +55,6 @@ font_manager.fontManager.ttflist.insert(0, fe) # or append is fine
 mpl.rcParams['font.family'] = fe.name # = 'your custom ttf font name'
 ######################################################################
 
-pathmovt = args.truthcsv
-pathmov  = args.mvcsv
-
 outpath = args.outpath
 
 paths={}
@@ -68,12 +65,12 @@ if args.mvcsv!='':
 
 ######################################################################
 colors = {
-            'truth'    : 'white',
-            'recon'    : 'darkorange',
+            'truth'    : 'black',
+            'recon'    : 'red',
         }
 
 labels = {
-            'truth'    : 'Truth',
+            'truth'     : 'Truth',
             'recon'     : 'Reconstruction',
         }
 
