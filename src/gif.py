@@ -176,7 +176,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                 TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
                 im =ax[i].imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
 
-                ax[i].set_title(f"{u_times[f]:.2f} UT", fontsize=18)
+                ax[i].set_title(titles[p], fontsize=18)
                 ax[i].set_xticks([]), ax[i].set_yticks([])
 
             if f==0:
@@ -206,7 +206,7 @@ def writegif(movieIs, titles, paths, outpath='./', fov=None, times=[], cmaps=cma
                 TBfactor = 3.254e13/(movieIs[p][f].rf**2 * movieIs[p][f].psize**2)/1e9
                 im =ax.imshow(np.array(movieIs[p][f].imarr(pol='I'))*TBfactor, cmap=cmaps[f], interpolation=interp, vmin=vmin, vmax=vmax, extent=lims)
 
-                ax.set_title(titles[p], fontsize=18)
+                ax.set_title(f"{u_times[f]:.2f} UT", fontsize=18)
                 ax.set_xticks([]), ax.set_yticks([])
 
             if f==0:
