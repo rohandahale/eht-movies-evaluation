@@ -4,18 +4,7 @@
 
 import os
 import glob
-
-# Dictionary of vida templates available
-modelsvida={
-        'crescent'  : 'mring_0_1', 
-        'ring'      : 'mring_0_0', 
-        'disk'      : 'disk_1', 
-        'edisk'     : 'stretchdisk_1',
-        'double'    : 'gauss_2', 
-        'point'     : 'gauss_2',
-        'sgra'      : 'stretchmring_1_4',
-        'mring'     : 'stretchmring_1_4'
-        }
+import ehtim as eh
 
 # Results Directory
 resultsdir='../VLX/results/'
@@ -29,28 +18,65 @@ truthdir='../VLX/truth/'
 # Data Directory
 datadir='../VLX/data/'
 
+# Physical CPU cores to be used
+cores = 100
+
+# Dictionary of vida templates available
+modelsvida={
+        'crescent'  : 'mring_0_1', 
+        'ring'      : 'mring_0_0', 
+        'disk'      : 'disk_1', 
+        'edisk'     : 'stretchdisk_1',
+        'double'    : 'gauss_2', 
+        'point'     : 'gauss_2',
+        }
+#vida_modelname = 'crescent', 'ring', 'disk', 'edisk', 'double', 'point', 'sgra'
+#modeltype      = 'ring', 'non-ring' (For REx)
+
 datalist=sorted(glob.glob(datadir+'*.uvfits'))
 
+for d in datalist:
+    obs = eh.obsdata.load_uvfits(d)
+    if obs.tstart<10.85 or obs.tstop>14.05:
+        obs = obs.flag_UT_range(UT_start_hour=10.85, UT_stop_hour=14.05, output='flagged')
+        obs.tstart, obs.tstop = obs.data['time'][0], obs.data['time'][-1]
+        obs.save_uvfits(d)
+        
 for d in datalist:
     ###############################################################################
     dataf = os.path.basename(d)
     datap = datadir + dataf
     
-    #modelname = 'mring' # 'crescent', 'ring', 'disk', 'edisk', 'double', 'point', 'sgra'
-    modelname      = dataf[:-7]         # sgra
-    vida_modelname = 'crescent'         # 'crescent', 'ring', 'disk', 'edisk', 'double', 'point', 'sgra'
-    modeltype      = 'ring'             # 'ring', 'non-ring' (For REx)
-    template       = 'mring_0_1'        # modelsvida[modelname]
-    scat           = 'none'             # Options: sct, dsct, none
+    if dataf.find('ring') != -1:
+        vida_modelname = 'ring'
+        modeltype      = 'ring' 
+    elif dataf.find('disk') != -1:
+        vida_modelname = 'disk'
+        modeltype      = 'non-ring' 
+    elif dataf.find('edisk') != -1:
+        vida_modelname = 'edisk'
+        modeltype      = 'non-ring' 
+    elif dataf.find('double') != -1:
+        vida_modelname = 'double'
+        modeltype      = 'non-ring' 
+    elif dataf.find('point') != -1:
+        vida_modelname = 'point'
+        modeltype      = 'non-ring' 
+    else:
+        vida_modelname = 'crescent'
+        modeltype      = 'ring' 
 
-    # Physical CPU cores to be used
-    cores = 100
+    modelname      = dataf[:-7]
+    template       = modelsvida[vida_modelname]
+    scat           = 'none' # Options: sct, dsct, none
 
     if modelname!='sgra':
         truth=truthdir+dataf[:-7]+'.hdf5'
     recon=recondir+dataf[:-7]+'.hdf5'
     
-    
+    if dataf.find('sgra') != -1 or dataf.find('SGRA') != -1 or dataf.find('hops') != -1:
+        modelname='sgra'
+        scat = 'dsct'
     # Reconstruction .hdf5 path
     pathmov = recon
     # Truth .hdf5 path
@@ -58,7 +84,6 @@ for d in datalist:
         pathmovt = truth
     # Unprocessed Data .uvfits path
     data = datap
-    
 
     print(f'Data: {datap}')
     if modelname!='sgra':
