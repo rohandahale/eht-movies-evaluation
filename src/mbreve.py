@@ -62,17 +62,19 @@ mpl.rcParams['font.family'] = fe.name # = 'your custom ttf font name'
 ######################################################################
 
 # Time average data to 60s
-obs = eh.obsdata.load_uvfits(args.data)
+obs = eh.obsdata.load_uvfits(args.data, polrep='circ')
 obs.add_scans()
 obs = obs.avg_coherent(60.0)
 
 # From GYZ: If data used by pipelines is descattered (refractive + diffractive),
 # Add 2% error and deblur original data.
 if args.scat=='dsct':
+    obs = obs.switch_polrep(polrep_out ='stokes')
     obs = obs.add_fractional_noise(0.02)
     import ehtim.scattering.stochastic_optics as so
     sm = so.ScatteringModel()
     obs = sm.Deblur_obs(obs)
+    obs = obs.switch_polrep(polrep_out ='circ')
 
 
 amp = pd.DataFrame(obs.data)
@@ -146,20 +148,26 @@ for ii in range(len(times)):
     try:
         idx = np.where(np.round(subtab['time'].values,3)  == np.round(tstamp,3))[0][0]                
         mb_time.append(subtab['time'][idx]) 
-        mb_window.append(np.sqrt(abs(subtab['qvis'][idx])**2+abs(subtab['uvis'][idx])**2)/abs(subtab['vis'][idx]))  
+        mb_window.append(abs(2*subtab['rlvis'][idx]/(subtab['rrvis'][idx]+subtab['rrvis'][idx])))  
     except:
         pass
     
 ######################################################################
 plt.errorbar(mb_time, mb_window, c='red', marker='o', ms=2.5, ls="none", label='Reconstruction', alpha=0.5, zorder=0)
 stab  = select_baseline(amp, 'AA', 'AZ')
-mbreve = np.sqrt(abs(stab['qvis'])**2+abs(stab['uvis'])**2)/abs(stab['vis'])
-mbreve_sig = np.sqrt((mbreve**2)*(stab['qsigma']**2-stab['usigma']**2+(stab['sigma']**2/abs(stab['vis'])**2)))/abs(stab['vis'])
+#mbreve = np.sqrt(abs(stab['qvis'])**2+abs(stab['uvis'])**2)/abs(stab['vis'])
+mbreve = abs(2*stab['rlvis']/(stab['rrvis']+stab['rrvis']))
+#mbreve_sig = np.sqrt((mbreve**2)*(stab['qsigma']**2-stab['usigma']**2+(stab['sigma']**2/abs(stab['vis'])**2)))/abs(stab['vis'])
+x = np.abs(stab['rlvis'])
+y = np.abs(stab['rrvis'])
+z = np.abs(stab['llvis'])
+mbreve_sig = (1 / x) * np.sqrt(x**2 * ((stab['rlsigma']**2 / (y + z)**2) - ((stab['rrsigma']**2 + stab['llsigma']**2) / (y + z)**4)))
 plt.errorbar(stab['time'], mbreve, yerr=mbreve_sig, c='black', mec='black', marker='o', ls="None", ms=5, alpha=0.5, label='AA-AZ')
 
 plt.yscale('log')
 plt.ylim(0.01,1)
 plt.xlabel('Time (UTC)')
-plt.ylabel("$|\\breve{m}| \\approx \sqrt{|\\tilde{Q}|^2+|\\tilde{U}|^2}/|\\tilde{I}|$")
+#plt.ylabel("$|\\breve{m}| \\approx \sqrt{|\\tilde{Q}|^2+|\\tilde{U}|^2}/|\\tilde{I}|$")
+plt.ylabel("$|\\breve{m}| = |2RL/(RR+LL)|$")
 plt.legend(ncols=2, loc='best',  bbox_to_anchor=(0.9, 1.2), markerscale=5.0, fontsize=16)
 plt.savefig(args.outpath, bbox_inches='tight', dpi=300)
