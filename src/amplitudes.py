@@ -64,6 +64,7 @@ mpl.rcParams['font.family'] = fe.name # = 'your custom ttf font name'
 
 # Time average data to 60s
 obs = eh.obsdata.load_uvfits(args.data)
+obs.add_scans()
 obs = obs.avg_coherent(60.0)
 
 # From GYZ: If data used by pipelines is descattered (refractive + diffractive),

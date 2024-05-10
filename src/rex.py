@@ -401,6 +401,7 @@ mpl.rcParams['font.family'] = fe.name # = 'your custom ttf font name'
 ######################################################################
 
 obs = eh.obsdata.load_uvfits(args.data)
+obs.add_scans()
 obs = obs.avg_coherent(60.0)
 
 obs.add_scans()

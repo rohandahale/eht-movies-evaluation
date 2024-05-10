@@ -135,10 +135,7 @@ for d in datalist:
     ##############################################################################################
     outpath_mbreve=f'{resultsdir}/mbreve_{modelname}.png'
     if not os.path.exists(outpath_mbreve):
-        if modelname!='sgra':
-            os.system(f'python ./src/mbreve.py -d {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath_mbreve} --scat {scat}')
-        else:
-            os.system(f'python ./src/mbreve.py -d {data} --mv {pathmov} -o {outpath_mbreve} --scat {scat}')
+        os.system(f'python ./src/mbreve.py -d {data} --mv {pathmov} -o {outpath_mbreve} --scat {scat}')
 
     ##############################################################################################      
     # Stokes I GIF
