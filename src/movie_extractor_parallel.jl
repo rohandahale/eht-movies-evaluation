@@ -352,16 +352,17 @@ end
     end
     rimage = VIDA.regrid(image, μas2rad(200.0), μas2rad(200.0), 64, 64)
     cimage = VIDA.clipimage(0.0,rimage)
-    div = VIDA.LeastSquares(cimage)
+    div = VIDA.NxCorr(cimage)
     t = @elapsed begin
         prob = VIDAProblem(div, template, lower, upper)
         xopt,  θ, divmin = vida(prob, BBO_adaptive_de_rand_1_bin(); maxiters=100_000)
-        xopt2, θ, divmin = vida(prob, CMAEvolutionStrategyOpt(); init_params=xopt, maxiters=100_000)
+        #xopt2, θ, divmin = vida(prob, CMAEvolutionStrategyOpt(); init_params=xopt, maxiters=100_000)
         #xopt2, θ, divmin = vida(prob, ECA(); init_params=xopt, use_initial=true, maxiters=10_000)
+        xopt2, θ, divmin = vida(prob, ECA(;options=Options(f_calls_limit = 10_000, f_tol = 1e-5)); init_params=xopt, use_initial=true)
     end
     println("This took $t seconds")
     println("The minimum divergence is $divmin")
-    return xopt2, θ, divmin, time
+    return xopt2, θ, divmin
 end
 
 

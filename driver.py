@@ -191,12 +191,12 @@ for d in datalist:
     # VIDA
     ##############################################################################################
     input  = pathmov
-    output = f'{resultsdir}/{modelname}_vida.csv'
+    output = f'{resultsdir}/vida_{modelname}.csv'
     if not os.path.exists(output):
         os.system(f'julia -p {cores} ./src/movie_extractor_parallel.jl --input {input} --output {output} --template {template} --stride {cores}')
     if modelname!='sgra':
         input_t  = pathmovt
-        output_t = f'{resultsdir}/{modelname}_truth_vida.csv'
+        output_t = f'{resultsdir}/vida_{modelname}_truth.csv'
         if not os.path.exists(output_t):
             os.system(f'julia -p {cores} ./src/movie_extractor_parallel.jl --input {input_t} --output {output_t} --template {template} --stride {cores}')
         truthcsv  = output_t
