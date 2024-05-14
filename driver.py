@@ -178,7 +178,7 @@ for d in datalist:
             os.system(f'python ./src/pol.py --data {data} --mv {pathmov} -o {outpath} --scat {scat}')
 
     ##############################################################################################    
-    # REx ring characterization
+    # REx, VIDA ring characterization
     ##############################################################################################
     if modeltype =='ring':
         outpath =f'{resultsdir}/rex_{modelname}.png'
@@ -187,6 +187,14 @@ for d in datalist:
                 os.system(f'python ./src/rex.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath}')
             else:
                 os.system(f'python ./src/rex.py --data {data} --mv {pathmov} -o {outpath}')
+        
+        outpath =f'{resultsdir}/vida_pol_{modelname}.png'
+        if not os.path.exists(outpath):
+            if modelname!='sgra':
+                os.system(f'python ./src/vida_pol.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} -c 100')
+            else:
+                os.system(f'python ./src/vida_pol.py --data {data} --mv {pathmov} -o {outpath} -c 100')
+
 
     ##############################################################################################        
     # VIDA
