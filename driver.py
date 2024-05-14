@@ -191,9 +191,9 @@ for d in datalist:
         outpath =f'{resultsdir}/vida_pol_{modelname}.png'
         if not os.path.exists(outpath):
             if modelname!='sgra':
-                os.system(f'python ./src/vida_pol.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} -c 100')
+                os.system(f'python ./src/vida_pol.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} -c {cores}')
             else:
-                os.system(f'python ./src/vida_pol.py --data {data} --mv {pathmov} -o {outpath} -c 100')
+                os.system(f'python ./src/vida_pol.py --data {data} --mv {pathmov} -o {outpath} -c {cores}')
 
 
     ##############################################################################################        
