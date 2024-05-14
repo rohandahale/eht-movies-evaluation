@@ -70,13 +70,14 @@ for d in datalist:
     template       = modelsvida[vida_modelname]
     scat           = 'none' # Options: sct, dsct, none
 
+    if dataf.find('sgra') != -1 or dataf.find('SGRA') != -1 or dataf.find('hops') != -1:
+        modelname='sgra'
+        scat = 'dsct'
+        
     if modelname!='sgra':
         truth=truthdir+dataf[:-7]+'.hdf5'
     recon=recondir+dataf[:-7]+'.hdf5'
     
-    if dataf.find('sgra') != -1 or dataf.find('SGRA') != -1 or dataf.find('hops') != -1:
-        modelname='sgra'
-        scat = 'dsct'
     # Reconstruction .hdf5 path
     pathmov = recon
     # Truth .hdf5 path
