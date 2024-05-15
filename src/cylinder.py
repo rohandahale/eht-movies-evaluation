@@ -383,8 +383,8 @@ moment = 0
 
 ### Calculate xi_crit
 racf_std = np.std(racf)
-xi_crit = 1*racf_std    ## ## start with 1 standard deviation for reconstructions. May need to be fine tuned once we have a larger sample of reconstructions 
-
+#xi_crit = 1*racf_std    ## ## start with 1 standard deviation for reconstructions. May need to be fine tuned once we have a larger sample of reconstructions 
+xi_crit = 0.6*racf_std
 
 ### Make sure no noise external to the central peak is included in the calculation. filter external noise using 'labels'
 from scipy.ndimage import label
