@@ -183,12 +183,21 @@ r_pix = r * (N/FOV_uas)
 x0 = x0 * (N/FOV_uas)
 y0 = y0 * (N/FOV_uas)
 
+"""
 ishift = -y0                        ## should be right for VIDA automated output
 jshift = -x0
 icirc = ishift + r_pix*np.sin(pa) 
 jcirc = jshift+ r_pix*np.cos(pa)
 x = (icirc )*dx
 y = (jcirc )*dy
+"""
+
+ishift = -y0  + M/2                      ## should be right for VIDA automated output
+jshift = -x0  + N/2                      ## should be right for VIDA automated output
+icirc = ishift + r_pix*np.sin(pa)
+jcirc = jshift+ r_pix*np.cos(pa)
+x = (icirc - N/2 )*dx
+y = (jcirc - M/2 )*dy
 
 # ishift = -x0 
 # jshift = -y0 
