@@ -131,6 +131,14 @@ for d in datalist:
         if not os.path.exists(outpath):
             os.system(f'python ./src/nxcorr.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
             
+        outpath =f'{resultsdir}/nxcorr_static_{modelname}.png'
+        if not os.path.exists(outpath):
+            os.system(f'python ./src/nxcorr_static.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
+            
+        outpath =f'{resultsdir}/nxcorr_dynamic_{modelname}.png'
+        if not os.path.exists(outpath):
+            os.system(f'python ./src/nxcorr_dynamic.py --data {data} --truthmv {pathmovt} --mv {pathmov} -o {outpath} --scat {scat}')
+            
     ##############################################################################################
     # MBREVE
     ##############################################################################################
